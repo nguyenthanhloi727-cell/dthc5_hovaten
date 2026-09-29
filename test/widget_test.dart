@@ -1,30 +1,49 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:nguyen_thanh_loi/config/current_member.dart';
+import 'package:nguyen_thanh_loi/config/team_members.dart';
 import 'package:nguyen_thanh_loi/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Có đủ các tab và tab Cá nhân đọc từ currentMember', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    for (final label in [
+      'Cá nhân',
+      'Báo thức',
+      'Dịch',
+      'Nhóm',
+      'Nhiệt độ',
+      'Đơn vị',
+    ]) {
+      expect(find.text(label), findsWidgets);
+    }
+    expect(find.text(currentMember.hoTen), findsOneWidget);
+    expect(find.text(currentMember.mssv), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Tab Nhóm hiện thành viên đầu tiên và giữ state khi chuyển tab', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.tap(find.byIcon(Icons.groups));
+    await tester.pumpAndSettle();
+    expect(find.text('1 / ${teamMembers.length}'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    if (teamMembers.length > 1) {
+      await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+      await tester.pumpAndSettle();
+      expect(find.text('2 / ${teamMembers.length}'), findsOneWidget);
+
+      // Sang tab khác rồi quay lại: vẫn ở trang 2 (IndexedStack giữ state).
+      await tester.tap(find.byIcon(Icons.thermostat));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.groups));
+      await tester.pumpAndSettle();
+      expect(find.text('2 / ${teamMembers.length}'), findsOneWidget);
+    }
   });
 }

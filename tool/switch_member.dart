@@ -37,7 +37,9 @@ void main(List<String> args) async {
 
   for (final key in ['ho_ten', 'mssv', 'sdt', 'email', 'lop', 'vai_tro']) {
     if ((target[key] ?? '').toString().trim().isEmpty) {
-      stderr.writeln('Thành viên $mssv thiếu trường "$key" trong $_membersFile.');
+      stderr.writeln(
+        'Thành viên $mssv thiếu trường "$key" trong $_membersFile.',
+      );
       exit(1);
     }
   }
@@ -45,7 +47,9 @@ void main(List<String> args) async {
   final hoTen = target['ho_ten'] as String;
   final appName = slugify(hoTen);
   if (!RegExp(r'^[a-z][a-z0-9_]*$').hasMatch(appName)) {
-    stderr.writeln('Không sinh được tên app hợp lệ từ "$hoTen" (được "$appName").');
+    stderr.writeln(
+      'Không sinh được tên app hợp lệ từ "$hoTen" (được "$appName").',
+    );
     exit(1);
   }
   final appId = 'com.$appName.app';
@@ -65,8 +69,12 @@ void main(List<String> args) async {
   _write(_membersFile, '${const JsonEncoder.withIndent('  ').convert(data)}\n');
   _write(_currentOut, _genCurrent(target));
   _write(_teamOut, _genTeam(members));
-  await Process.run('dart', ['format', _currentOut, _teamOut],
-      workingDirectory: root.path, runInShell: true);
+  await Process.run(
+    'dart',
+    ['format', _currentOut, _teamOut],
+    workingDirectory: root.path,
+    runInShell: true,
+  );
   stdout.writeln('  ✓ ghi $_currentOut, $_teamOut');
 
   if (!skipClean) {
@@ -78,7 +86,9 @@ void main(List<String> args) async {
   if (leaks.isEmpty) {
     stdout.writeln('\n✓ Không còn dấu vết thành viên khác trong project.');
   } else {
-    stdout.writeln('\n! Còn sót thông tin thành viên khác (${leaks.length} chỗ):');
+    stdout.writeln(
+      '\n! Còn sót thông tin thành viên khác (${leaks.length} chỗ):',
+    );
     leaks.forEach(stdout.writeln);
   }
   stdout.writeln('\nXong. Chạy lại app: flutter run');
@@ -114,9 +124,10 @@ String removeDiacritics(String s) {
 }
 
 /// "Nguyễn Văn A" -> "nguyen_van_a"
-String slugify(String hoTen) => removeDiacritics(hoTen)
-    .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
-    .replaceAll(RegExp(r'^_+|_+$'), '');
+String slugify(String hoTen) =>
+    removeDiacritics(hoTen)
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'^_+|_+$'), '');
 
 // ---------------------------------------------------------------- các bước
 
@@ -147,26 +158,35 @@ void _replaceImports(String oldName, String newName) {
       }
     }
   }
-  stdout.writeln('  ✓ import package:$oldName/ -> package:$newName/ ($count file)');
+  stdout.writeln(
+    '  ✓ import package:$oldName/ -> package:$newName/ ($count file)',
+  );
 }
 
 void _updateManifestLabel(String label) {
   const path = 'android/app/src/main/AndroidManifest.xml';
   if (!File(_p(path)).existsSync()) return;
-  final text = _read(path).replaceFirst(
-      RegExp(r'android:label="[^"]*"'), 'android:label="$label"');
+  final text = _read(path)
+      .replaceFirst(RegExp(r'android:label="[^"]*"'), 'android:label="$label"');
   _write(path, text);
   stdout.writeln('  ✓ android:label = $label');
 }
 
 void _updateGradle(String appId) {
-  for (final path in ['android/app/build.gradle.kts', 'android/app/build.gradle']) {
+  for (final path in [
+    'android/app/build.gradle.kts',
+    'android/app/build.gradle',
+  ]) {
     if (!File(_p(path)).existsSync()) continue;
     final text = _read(path)
         .replaceAllMapped(
-            RegExp(r'''(namespace\s*=?\s*)["'][^"']*["']'''), (m) => '${m[1]}"$appId"')
+          RegExp(r'''(namespace\s*=?\s*)["'][^"']*["']'''),
+          (m) => '${m[1]}"$appId"',
+        )
         .replaceAllMapped(
-            RegExp(r'''(applicationId\s*=?\s*)["'][^"']*["']'''), (m) => '${m[1]}"$appId"');
+          RegExp(r'''(applicationId\s*=?\s*)["'][^"']*["']'''),
+          (m) => '${m[1]}"$appId"',
+        );
     _write(path, text);
     stdout.writeln('  ✓ $path: namespace/applicationId = $appId');
   }
@@ -180,12 +200,16 @@ void _moveMainActivity(String appId) {
     final activities = srcRoot
         .listSync(recursive: true)
         .whereType<File>()
-        .where((f) => RegExp(r'[\\/]MainActivity\.(java|kt)$').hasMatch(f.path));
+        .where(
+          (f) => RegExp(r'[\\/]MainActivity\.(java|kt)$').hasMatch(f.path),
+        );
     for (final f in activities.toList()) {
       final ext = f.path.endsWith('.kt') ? 'kt' : 'java';
       final semi = ext == 'java' ? ';' : '';
       final content = f.readAsStringSync().replaceFirst(
-          RegExp(r'^package\s+[\w.]+;?', multiLine: true), 'package $appId$semi');
+        RegExp(r'^package\s+[\w.]+;?', multiLine: true),
+        'package $appId$semi',
+      );
       final dest = File('${srcRoot.path}/$pkgPath/MainActivity.$ext');
       if (_same(f, dest)) {
         dest.writeAsStringSync(content);
@@ -207,8 +231,9 @@ void _updateIos(String appName, String appId) {
     var text = _read(plist);
     for (final key in ['CFBundleDisplayName', 'CFBundleName']) {
       text = text.replaceAllMapped(
-          RegExp('(<key>$key</key>\\s*<string>)[^<]*(</string>)'),
-          (m) => '${m[1]}$appName${m[2]}');
+        RegExp('(<key>$key</key>\\s*<string>)[^<]*(</string>)'),
+        (m) => '${m[1]}$appName${m[2]}',
+      );
     }
     _write(plist, text);
     stdout.writeln('  ✓ iOS CFBundleDisplayName = $appName');
@@ -216,8 +241,9 @@ void _updateIos(String appName, String appId) {
   const pbx = 'ios/Runner.xcodeproj/project.pbxproj';
   if (File(_p(pbx)).existsSync()) {
     final text = _read(pbx).replaceAllMapped(
-        RegExp(r'PRODUCT_BUNDLE_IDENTIFIER = [^;]*?(\.RunnerTests)?;'),
-        (m) => 'PRODUCT_BUNDLE_IDENTIFIER = $appId${m[1] ?? ''};');
+      RegExp(r'PRODUCT_BUNDLE_IDENTIFIER = [^;]*?(\.RunnerTests)?;'),
+      (m) => 'PRODUCT_BUNDLE_IDENTIFIER = $appId${m[1] ?? ''};',
+    );
     _write(pbx, text);
     stdout.writeln('  ✓ iOS bundle id = $appId');
   }
@@ -225,7 +251,8 @@ void _updateIos(String appName, String appId) {
 
 // ---------------------------------------------------------------- sinh code
 
-String _dartStr(Object? v) => "'${(v ?? '').toString().replaceAll(r'\', r'\\').replaceAll("'", r"\'").replaceAll(r'$', r'\$')}'";
+String _dartStr(Object? v) =>
+    "'${(v ?? '').toString().replaceAll(r'\', r'\\').replaceAll("'", r"\'").replaceAll(r'$', r'\$')}'";
 
 String _memberLiteral(Map<String, dynamic> m, {String indent = '  '}) {
   final anh = (m['anh'] ?? '').toString();
@@ -241,18 +268,21 @@ $indent  anh: ${hasPhoto ? _dartStr(anh) : 'null'},
 $indent)''';
 }
 
-const _header = '''// GENERATED bởi tool/switch_member.dart từ members.json — KHÔNG SỬA TAY.
+const _header =
+    '''// GENERATED bởi tool/switch_member.dart từ members.json — KHÔNG SỬA TAY.
 // Muốn đổi: sửa members.json rồi chạy `dart run tool/switch_member.dart <mssv>`.
 ''';
 
-String _genCurrent(Map<String, dynamic> m) => '''$_header
+String _genCurrent(Map<String, dynamic> m) =>
+    '''$_header
 import 'member.dart';
 
 /// Thành viên đang "sở hữu" bản build này (tab Cá nhân, nút Gọi điện...).
 const currentMember = ${_memberLiteral(m, indent: '')};
 ''';
 
-String _genTeam(List<Map<String, dynamic>> members) => '''$_header
+String _genTeam(List<Map<String, dynamic>> members) =>
+    '''$_header
 import 'member.dart';
 
 /// Toàn bộ thành viên nhóm (tab Nhóm), không phụ thuộc thành viên hiện tại.
@@ -263,8 +293,12 @@ ${members.map((m) => '  ${_memberLiteral(m, indent: '  ')},').join('\n')}
 
 // ---------------------------------------------------------------- kiểm tra sót
 
-Future<List<String>> _scanLeaks(List<Map<String, dynamic>> members,
-    Map<String, dynamic> current, String oldName, String newName) async {
+Future<List<String>> _scanLeaks(
+  List<Map<String, dynamic>> members,
+  Map<String, dynamic> current,
+  String oldName,
+  String newName,
+) async {
   final terms = <String>{};
   for (final m in members) {
     if (identical(m, current)) continue;
@@ -283,7 +317,14 @@ Future<List<String>> _scanLeaks(List<Map<String, dynamic>> members,
   terms.removeWhere((t) => t.length < 4);
 
   final tracked = await _gitVisibleFiles();
-  const skipDirs = {'build', '.dart_tool', '.git', '.gradle', '.kotlin', '.cxx'};
+  const skipDirs = {
+    'build',
+    '.dart_tool',
+    '.git',
+    '.gradle',
+    '.kotlin',
+    '.cxx',
+  };
   final skipFiles = {_membersFile, _currentOut, _teamOut};
   final hits = <String>[];
 
@@ -324,8 +365,11 @@ Future<List<String>> _scanLeaks(List<Map<String, dynamic>> members,
 Future<Set<String>?> _gitVisibleFiles() async {
   try {
     final r = await Process.run(
-        'git', ['ls-files', '-co', '--exclude-standard'],
-        workingDirectory: root.path, runInShell: true);
+      'git',
+      ['ls-files', '-co', '--exclude-standard'],
+      workingDirectory: root.path,
+      runInShell: true,
+    );
     if (r.exitCode != 0) return null;
     return (r.stdout as String)
         .split('\n')
@@ -348,7 +392,9 @@ Directory _findRoot() {
     }
     final parent = d.parent;
     if (parent.path == d.path) {
-      stderr.writeln('Không tìm thấy $_membersFile — hãy chạy trong thư mục project.');
+      stderr.writeln(
+        'Không tìm thấy $_membersFile — hãy chạy trong thư mục project.',
+      );
       exit(1);
     }
     d = parent;
@@ -389,8 +435,12 @@ void _removeEmptyDirs(Directory dir, Directory stopAt) {
 
 Future<void> _flutter(List<String> args) async {
   stdout.writeln('  … flutter ${args.join(' ')}');
-  final r = await Process.run('flutter', args,
-      workingDirectory: root.path, runInShell: true);
+  final r = await Process.run(
+    'flutter',
+    args,
+    workingDirectory: root.path,
+    runInShell: true,
+  );
   if (r.exitCode != 0) {
     stderr.writeln('  ! flutter ${args.join(' ')} lỗi (exit ${r.exitCode}):');
     stderr.writeln(r.stderr);

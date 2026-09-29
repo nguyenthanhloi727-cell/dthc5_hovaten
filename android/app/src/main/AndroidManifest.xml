@@ -1,4 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tải model dịch ML Kit lần đầu -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- speech_to_text: báo thức bằng giọng nói + dịch giọng nói -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- image_picker (chụp ảnh) + camera (dịch realtime) -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Đặt báo thức vào app Đồng hồ qua intent SET_ALARM -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
+
     <application
         android:label="nguyen_thanh_loi"
         android:name="${applicationName}"
@@ -31,15 +43,43 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- Android 11+ (package visibility): khai báo các intent app cần tìm/mở. -->
     <queries>
+        <!-- Flutter engine: io.flutter.plugin.text.ProcessTextPlugin -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- url_launcher: gọi điện -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="tel"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:scheme="tel"/>
+        </intent>
+        <!-- url_launcher: mở web / YouTube -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="mailto"/>
+        </intent>
+        <package android:name="com.google.android.youtube"/>
+        <!-- speech_to_text -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
+        <!-- image_picker: app camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE"/>
+        </intent>
+        <!-- Báo thức: app Đồng hồ -->
+        <intent>
+            <action android:name="android.intent.action.SET_ALARM"/>
         </intent>
     </queries>
 </manifest>
