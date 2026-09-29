@@ -1,4 +1,4 @@
-# dthc5_nguyenthanhloi
+# Bài tập Flutter nhóm DTHC5
 
 A new Flutter project.
 

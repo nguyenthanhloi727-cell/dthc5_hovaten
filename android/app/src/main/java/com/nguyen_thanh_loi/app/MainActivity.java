@@ -1,4 +1,4 @@
-package com.example.dthc5_nguyenthanhloi;
+package com.nguyen_thanh_loi.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

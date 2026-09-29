@@ -1,0 +1,32 @@
+{
+  "current": "2200000001",
+  "members": [
+    {
+      "ho_ten": "Nguyễn Thanh Lợi",
+      "mssv": "2200000001",
+      "sdt": "0900000001",
+      "email": "thanhvien1@example.com",
+      "lop": "DTHC5",
+      "vai_tro": "Nhóm trưởng",
+      "anh": "assets/members/2200000001.jpg"
+    },
+    {
+      "ho_ten": "Trần Thị Mẫu Hai",
+      "mssv": "2200000002",
+      "sdt": "0900000002",
+      "email": "thanhvien2@example.com",
+      "lop": "DTHC5",
+      "vai_tro": "Thành viên",
+      "anh": "assets/members/2200000002.jpg"
+    },
+    {
+      "ho_ten": "Lê Văn Mẫu Ba",
+      "mssv": "2200000003",
+      "sdt": "0900000003",
+      "email": "thanhvien3@example.com",
+      "lop": "DTHC5",
+      "vai_tro": "Thành viên",
+      "anh": "assets/members/2200000003.jpg"
+    }
+  ]
+}
