@@ -41,7 +41,9 @@ Future<void> main(List<String> args) async {
     final errors = _validateAll(n);
     if (errors.isNotEmpty) {
       stderr.writeln('File thông tin có lỗi:');
-      errors.forEach((e) => stderr.writeln('  - $e'));
+      for (var e in errors) {
+        stderr.writeln('  - $e');
+      }
       exit(1);
     }
     me = _normalize(n);
@@ -231,8 +233,9 @@ Map<String, dynamic> _askMember(
   bool skipMssv = false,
 }) {
   final out = <String, dynamic>{};
-  if (!skipMssv)
+  if (!skipMssv) {
     out['mssv'] = _ask('MSSV', current: m['mssv'] as String?, check: checkMssv);
+  }
   out['ho_ten'] = normalizeHoTen(
     _ask(
       'Họ và tên (có dấu)',
@@ -418,10 +421,12 @@ String? _checkPhoto(String path) {
   final f = File(path);
   if (!f.existsSync()) return 'Không thấy file ảnh: $path';
   final ext = path.split('.').last.toLowerCase();
-  if (!['jpg', 'jpeg', 'png'].contains(ext))
+  if (!['jpg', 'jpeg', 'png'].contains(ext)) {
     return 'Ảnh phải là .jpg, .jpeg hoặc .png';
-  if (f.lengthSync() > 5 * 1024 * 1024)
+  }
+  if (f.lengthSync() > 5 * 1024 * 1024) {
     return 'Ảnh lớn hơn 5MB, hãy chọn ảnh nhỏ hơn.';
+  }
   return null;
 }
 
