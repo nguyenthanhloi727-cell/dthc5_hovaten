@@ -116,11 +116,11 @@ Future<void> main(List<String> args) async {
   var cleanIde = false;
   if (ideFiles.isNotEmpty) {
     cleanIde = answers != null
-        ? (answers['xoa_file_ide'] as bool? ?? true)
+        ? (answers['xoa_file_ide'] as bool? ?? false)
         : _yes(
-            '\nXoá ${ideFiles.length} file cấu hình IDE cũ (.idea, *.iml — chứa tên app cũ, '
-            'Android Studio sẽ tự tạo lại)?',
-            true,
+            '\nXoá ${ideFiles.length} file cấu hình IDE (.idea, *.iml — chứa tên app cũ, '
+            'không nộp lên git; Android Studio tự tạo lại nhưng MẤT cấu hình IDE riêng)?',
+            false,
           );
   }
 
@@ -139,11 +139,13 @@ Future<void> main(List<String> args) async {
         ? (File(_p(me['anh'] as String)).existsSync()
               ? me['anh']
               : '(không có → hiện chữ cái đầu)')
-        : '$photoSrc → ${me['anh']}',
+        : '$photoSrc → $_photoDir/${me['mssv']}.${_photoExt(photoSrc)}',
   );
   _row('Tên app', appName);
   _row('applicationId', 'com.$appName.app');
-  if (gitName != null) _row('Git', '$gitName <$gitEmail>');
+  if (gitName != null && gitName.isNotEmpty) {
+    _row('Git', '$gitName <$gitEmail>');
+  }
   _row('Số thành viên nhóm', members.length);
   if (answers == null && !_yes('\nÁp dụng các thay đổi trên?', false)) {
     stdout.writeln('Đã huỷ, không thay đổi gì.');
@@ -433,8 +435,7 @@ String? _checkPhoto(String path) {
 /// Copy ảnh vào `assets/members/<mssv>.<ext>`, xoá ảnh cũ khác đuôi.
 void _installPhoto(String src, Map<String, dynamic> m) {
   final mssv = m['mssv'] as String;
-  var ext = src.split('.').last.toLowerCase();
-  if (ext == 'jpeg') ext = 'jpg';
+  final ext = _photoExt(src);
   final old = _existingPhoto(mssv);
   final dest = '$_photoDir/$mssv.$ext';
   Directory(_p(_photoDir)).createSync(recursive: true);
@@ -442,6 +443,11 @@ void _installPhoto(String src, Map<String, dynamic> m) {
   if (old != null && old != dest) File(_p(old)).deleteSync();
   m['anh'] = dest;
   stdout.writeln('  ✓ ảnh → $dest');
+}
+
+String _photoExt(String path) {
+  final ext = path.split('.').last.toLowerCase();
+  return ext == 'jpeg' ? 'jpg' : ext;
 }
 
 String? _existingPhoto(String mssv) {

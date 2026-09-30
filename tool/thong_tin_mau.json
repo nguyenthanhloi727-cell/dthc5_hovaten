@@ -9,8 +9,8 @@
     "anh_file": ""
   },
   "git": {
-    "name": "NguyenVanA",
-    "email": "nguyenvana@example.com"
+    "name": "",
+    "email": ""
   },
-  "xoa_file_ide": true
+  "xoa_file_ide": false
 }
