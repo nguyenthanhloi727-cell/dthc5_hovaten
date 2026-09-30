@@ -5,10 +5,10 @@ import 'member.dart';
 
 /// Thành viên đang "sở hữu" bản build này (tab Cá nhân, nút Gọi điện...).
 const currentMember = Member(
-  hoTen: 'Nguyễn Thanh Lợi',
-  mssv: '2200000001',
+  hoTen: 'Nguyễn Thành Lợi',
+  mssv: '2380601289',
   sdt: '0900000001',
-  email: 'thanhvien1@example.com',
-  lop: 'DTHC5',
-  anh: null,
+  email: 'nguyenthanhloi727@gmail.com',
+  lop: '23DTHC5',
+  anh: 'assets/members/2380601289.jpg',
 );

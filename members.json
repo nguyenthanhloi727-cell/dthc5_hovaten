@@ -1,20 +1,20 @@
 {
-  "current": "2200000001",
+  "current": "2380601289",
   "members": [
     {
-      "ho_ten": "Nguyễn Thanh Lợi",
-      "mssv": "2200000001",
+      "ho_ten": "Nguyễn Thành Lợi",
+      "mssv": "2380601289",
       "sdt": "0900000001",
-      "email": "thanhvien1@example.com",
-      "lop": "DTHC5",
-      "anh": "assets/members/2200000001.jpg"
+      "email": "nguyenthanhloi727@gmail.com",
+      "lop": "23DTHC5",
+      "anh": "assets/members/2380601289.jpg"
     },
     {
       "ho_ten": "Trần Thị Mẫu Hai",
       "mssv": "2200000002",
       "sdt": "0900000002",
       "email": "thanhvien2@example.com",
-      "lop": "DTHC5",
+      "lop": "23DTHC5",
       "anh": "assets/members/2200000002.jpg"
     },
     {
@@ -22,7 +22,7 @@
       "mssv": "2200000003",
       "sdt": "0900000003",
       "email": "thanhvien3@example.com",
-      "lop": "DTHC5",
+      "lop": "23DTHC5",
       "anh": "assets/members/2200000003.jpg"
     }
   ]
