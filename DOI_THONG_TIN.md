@@ -157,7 +157,7 @@ dart run tool/switch_member.dart <MSSV-người-cũ>
 dart run tool/switch_member.dart 2380601699
 ```
 
-## Bước 5 — Nộp bài bằng GitHub của mình
+## Bước 5 — Nộp bài bằng GitHub của mình ( à nếu không cần thì khỏi cũng được, chạy được trên máy của bây là ok )
 
 Lịch sử git lưu **tên người commit** trong từng commit. Nếu chỉ sửa code rồi push, tab *Commits* trên GitHub vẫn hiện tên người khác. Vì vậy phải tạo lịch sử mới:
 
