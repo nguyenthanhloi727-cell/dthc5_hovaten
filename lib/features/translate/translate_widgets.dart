@@ -13,7 +13,8 @@ class LanguageBar extends StatelessWidget {
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) => Padding(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+        // Chừa chỗ cho nhãn nổi "Từ"/"Sang" không bị TabBar đè lên.
+        padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
         child: Row(
           children: [
             Expanded(
