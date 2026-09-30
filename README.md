@@ -2,7 +2,9 @@
 
 App Android làm bằng Flutter gồm: thông tin cá nhân (gọi điện, mở YouTube), đặt báo thức bằng giọng nói nhiều ngôn ngữ, dịch bằng Google ML Kit (nhập chữ, giọng nói, ảnh chụp, camera realtime) và tab giới thiệu nhóm. Toàn bộ thông tin cá nhân nằm trong **`members.json`**. Mỗi thành viên chạy **1 tool** là app đổi thành của mình (tên app, applicationId, tab Cá nhân, số gọi điện…), không phải sửa code.
 
-📖 **[Hướng dẫn sử dụng chi tiết (có ảnh)](docs/HUONG_DAN_SU_DUNG.md)**: cách dùng từng tab, cách đổi sang thông tin của mình, kịch bản demo cho thầy.
+📖 **[Hướng dẫn sử dụng app (có ảnh)](docs/HUONG_DAN_SU_DUNG.md)**: cách dùng từng tab, kịch bản demo cho thầy.
+
+🔁 **[Đổi sang thông tin của mình](DOI_THONG_TIN.md)**: tool đổi tên, MSSV, SĐT, ảnh và cách nộp bài riêng.
 
 ## Checklist yêu cầu đề bài
 
@@ -44,64 +46,9 @@ flutter run
 
 Chạy test: `flutter test` · Kiểm tra code: `flutter analyze`
 
-## ⭐ Hướng dẫn đổi thành viên (đọc kỹ)
+## ⭐ Đổi sang thông tin của mình
 
-Mỗi người nộp bài riêng nên phải đổi app thành tên mình. **Không sửa tay trong code.**
-
-**a. Chuẩn bị thông tin:** họ tên có dấu, MSSV, SĐT, email, lớp, 1 ảnh chân dung (.jpg/.png, dưới 5MB).
-
-**b. Chạy tool** — bấm đúp `doi_thong_tin.bat` ở thư mục gốc, hoặc:
-
-```bash
-dart run tool/doi_thong_tin.dart
-```
-
-Tool hỏi lần lượt từng trường (Enter = giữ giá trị cũ), trong đó có **đường dẫn file ảnh** (tool tự copy vào `assets/members/<mssv>.jpg`). Nhập sai định dạng tool sẽ báo và hỏi lại. Cuối cùng xác nhận `y` → tool đổi tên app, applicationId, MainActivity, sinh `lib/config/*.dart`, chạy `flutter clean`, quét chỗ còn sót thông tin người khác và chạy `flutter analyze`.
-
-Nếu cửa sổ lệnh **không gõ được tiếng Việt**, điền file rồi chạy:
-
-```bash
-copy tool\thong_tin_mau.json thong_tin.json
-dart run tool/doi_thong_tin.dart --file thong_tin.json
-```
-
-Mẫu 1 entry trong `members.json` (tool tự ghi, không cần sửa tay):
-
-```json
-{
-  "ho_ten": "Nguyễn Văn A",
-  "mssv": "2200000009",
-  "sdt": "0900000009",
-  "email": "nguyenvana@example.com",
-  "lop": "DTHC5",
-  "anh": "assets/members/2200000009.jpg"
-}
-```
-
-**c. Kiểm tra:**
-
-```bash
-flutter run
-```
-
-- Tên app trên màn hình điện thoại là `ho_va_ten` của bạn (vd `nguyen_van_a`).
-- Tab **Cá nhân** hiện đúng tên, MSSV; bấm **Gọi điện** ra đúng số của bạn.
-- Tab **Nhóm** có ảnh của bạn.
-- Điện thoại Xiaomi/Oppo… có thể hỏi xác nhận cài app mới (vì applicationId đổi) → bấm **Cài đặt**.
-
-**d. NỘP BÀI RIÊNG bằng tài khoản GitHub của mình:**
-
-```bash
-xcopy /E /I /H <thu-muc-repo> D:\bai-nop-cua-toi
-cd /d D:\bai-nop-cua-toi
-rmdir /S /Q .git
-git init
-git add -A
-git commit -m "feat: bai tap Flutter"
-gh repo create <ten-repo-cua-ban> --private --source=. --push
-```
-
-**Vì sao phải xoá `.git`?** Lịch sử git lưu tên + email của **người commit ban đầu** trong từng commit. Nếu chỉ đổi code rồi push, thầy mở tab *Commits* trên GitHub vẫn thấy tên người khác. `git init` lại + commit bằng tài khoản của mình thì lịch sử chỉ có tên bạn. (Kiểm tra: `git config user.name` phải là tên bạn trước khi commit.)
+Xem file riêng **[DOI_THONG_TIN.md](DOI_THONG_TIN.md)**: chạy `doi_thong_tin.bat`, điền họ tên / MSSV / SĐT / ảnh, tool tự đổi tên app, applicationId, tab Cá nhân, số gọi điện; kèm cách nộp bài bằng GitHub của mình.
 
 ## Package sử dụng
 
