@@ -27,7 +27,7 @@ const teamMembers = <Member>[
     sdt: '0900000003',
     email: 'thanhvien3@example.com',
     lop: '23DTHC5',
-    anh: null,
+    anh: 'assets/members/2380600166.jpg',
   ),
   Member(
     hoTen: 'Phương Bảo Khôi',
