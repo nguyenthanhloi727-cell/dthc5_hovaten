@@ -154,7 +154,7 @@ dart run tool/switch_member.dart <MSSV-người-cũ>
 `switch_member.dart` cũng dùng được riêng để đổi nhanh sang một người **đã có sẵn** trong `members.json` mà không cần hỏi lại gì:
 
 ```bash
-dart run tool/switch_member.dart 2380601699
+dart run tool/switch_member.dart <MSSV>
 ```
 
 ## Bước 5 — Nộp bài bằng GitHub của mình ( à nếu không cần thì khỏi cũng được, chạy được trên máy của bây là ok )
