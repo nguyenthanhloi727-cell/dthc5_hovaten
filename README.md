@@ -2,6 +2,8 @@
 
 App Android làm bằng Flutter gồm: thông tin cá nhân (gọi điện, mở YouTube), đặt báo thức bằng giọng nói nhiều ngôn ngữ, dịch bằng Google ML Kit (nhập chữ, giọng nói, ảnh chụp, camera realtime) và tab giới thiệu nhóm. Toàn bộ thông tin cá nhân nằm trong **`members.json`**. Mỗi thành viên chạy **1 tool** là app đổi thành của mình (tên app, applicationId, tab Cá nhân, số gọi điện…), không phải sửa code.
 
+📖 **[Hướng dẫn sử dụng chi tiết (có ảnh)](docs/HUONG_DAN_SU_DUNG.md)**: cách dùng từng tab, cách đổi sang thông tin của mình, kịch bản demo cho thầy.
+
 ## Checklist yêu cầu đề bài
 
 | # | Yêu cầu | Tab | File chính | Cách demo cho thầy |
