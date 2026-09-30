@@ -7,6 +7,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'src/member_utils.dart';
+
 const _membersFile = 'members.json';
 const _currentOut = 'lib/config/current_member.dart';
 const _teamOut = 'lib/config/team_members.dart';
@@ -93,41 +95,6 @@ void main(List<String> args) async {
   }
   stdout.writeln('\nXong. Chạy lại app: flutter run');
 }
-
-// ---------------------------------------------------------------- tên app
-
-const _viMap = {
-  'àáạảãâầấậẩẫăằắặẳẵ': 'a',
-  'èéẹẻẽêềếệểễ': 'e',
-  'ìíịỉĩ': 'i',
-  'òóọỏõôồốộổỗơờớợởỡ': 'o',
-  'ùúụủũưừứựửữ': 'u',
-  'ỳýỵỷỹ': 'y',
-  'đ': 'd',
-};
-
-String removeDiacritics(String s) {
-  final lower = s.toLowerCase();
-  final buf = StringBuffer();
-  for (final ch in lower.split('')) {
-    var out = ch;
-    for (final e in _viMap.entries) {
-      if (e.key.contains(ch)) {
-        out = e.value;
-        break;
-      }
-    }
-    buf.write(out);
-  }
-  // Loại dấu tổ hợp (khi chuỗi ở dạng NFD).
-  return buf.toString().replaceAll(RegExp('[̀-ͯ]'), '');
-}
-
-/// "Nguyễn Văn A" -> "nguyen_van_a"
-String slugify(String hoTen) =>
-    removeDiacritics(hoTen)
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
-        .replaceAll(RegExp(r'^_+|_+$'), '');
 
 // ---------------------------------------------------------------- các bước
 
@@ -325,7 +292,7 @@ Future<List<String>> _scanLeaks(
     '.kotlin',
     '.cxx',
   };
-  final skipFiles = {_membersFile, _currentOut, _teamOut};
+  final skipFiles = {_membersFile, '$_membersFile.bak', _currentOut, _teamOut};
   final hits = <String>[];
 
   void walk(Directory d) {

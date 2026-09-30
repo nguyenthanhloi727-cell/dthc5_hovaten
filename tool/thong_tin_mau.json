@@ -1,0 +1,16 @@
+{
+  "nguoi_nop": {
+    "ho_ten": "Nguyễn Văn A",
+    "mssv": "2200000009",
+    "sdt": "0900000009",
+    "email": "nguyenvana@example.com",
+    "lop": "DTHC5",
+    "vai_tro": "Thành viên",
+    "anh_file": ""
+  },
+  "git": {
+    "name": "NguyenVanA",
+    "email": "nguyenvana@example.com"
+  },
+  "xoa_file_ide": true
+}

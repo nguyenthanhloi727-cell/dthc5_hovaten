@@ -60,3 +60,6 @@ android/local.properties
 *.keystore
 key.properties
 .vscode/
+
+# Sao lưu do tool/doi_thong_tin.dart tạo
+*.bak
