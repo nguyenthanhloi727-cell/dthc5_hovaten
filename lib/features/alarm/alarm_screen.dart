@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../common/mic_button.dart';
 import '../common/speech_service.dart';
 import '../common/ui_helpers.dart';
 import 'alarm_service.dart';
@@ -21,6 +22,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
   TimeParser _parser = TimeParser.all.first;
   bool _listening = false;
+  double _level = 0;
   ParsedTime? _parsed;
   String? _hint;
 
@@ -71,8 +73,16 @@ class _AlarmScreenState extends State<AlarmScreen> {
         onError: (msg) {
           if (mounted) showError(context, msg);
         },
+        onSoundLevel: (l) {
+          if (mounted) setState(() => _level = l);
+        },
         onDone: () {
-          if (mounted) setState(() => _listening = false);
+          if (mounted) {
+            setState(() {
+              _listening = false;
+              _level = 0;
+            });
+          }
         },
       );
     } on SpeechException catch (e) {
@@ -141,11 +151,10 @@ class _AlarmScreenState extends State<AlarmScreen> {
           ),
           const SizedBox(height: 24),
           Center(
-            child: FloatingActionButton.large(
-              heroTag: 'alarm_mic',
+            child: MicButton(
+              listening: _listening,
+              soundLevel: _level,
               onPressed: _toggleListen,
-              backgroundColor: _listening ? Colors.red : null,
-              child: Icon(_listening ? Icons.stop : Icons.mic),
             ),
           ),
           const SizedBox(height: 8),

@@ -59,6 +59,7 @@ class _TextTranslateTabState extends State<TextTranslateTab>
           label: const Text('Dịch'),
         ),
         const SizedBox(height: 12),
+        buildMismatchHint(),
         TranslationResultCard(
           result: result,
           error: error,

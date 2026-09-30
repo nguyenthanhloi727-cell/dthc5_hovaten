@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
+
+import 'text_tools.dart';
 
 /// Ngôn ngữ hỗ trợ trong tab Dịch.
 class AppLanguage {
@@ -33,6 +36,7 @@ enum ModelStatus { unknown, checking, downloading, ready, error }
 /// translator ML Kit.
 class TranslationController extends ChangeNotifier {
   final _models = OnDeviceTranslatorModelManager();
+  final _langId = LanguageIdentifier(confidenceThreshold: 0.5);
 
   AppLanguage source = AppLanguage.all[1]; // Anh
   AppLanguage target = AppLanguage.all[0]; // Việt
@@ -129,14 +133,37 @@ class TranslationController extends ChangeNotifier {
     if (!await ensureModels()) {
       throw StateError(statusText);
     }
-    _translator ??= OnDeviceTranslator(
+    final translator = _translator ??= OnDeviceTranslator(
       sourceLanguage: source.ml,
       targetLanguage: target.ml,
     );
     try {
-      return await _translator!.translateText(input);
+      // Dịch từng câu: model offline dịch câu ngắn chính xác hơn nhiều so với
+      // cả khối văn bản dài, và giữ nguyên ngắt dòng.
+      final parts = splitSentences(input);
+      final out = <String>[];
+      for (final p in parts) {
+        out.add(p == '\n' ? p : await translator.translateText(p));
+      }
+      return joinSentences(out);
     } on PlatformException catch (e) {
       throw StateError('Dịch thất bại: ${e.message ?? e.code}');
+    }
+  }
+
+  /// Nhận diện ngôn ngữ của [text] (ML Kit Language ID, offline).
+  /// Trả null nếu không chắc chắn hoặc không thuộc danh sách hỗ trợ.
+  Future<AppLanguage?> detectLanguage(String text) async {
+    final t = text.trim();
+    if (t.length < 8) return null;
+    try {
+      final tag = await _langId.identifyLanguage(t);
+      if (tag == _langId.undeterminedLanguageCode) return null;
+      return AppLanguage.all
+          .where((l) => l.code == tag || tag.startsWith('${l.code}-'))
+          .firstOrNull;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -148,6 +175,7 @@ class TranslationController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _translator?.close();
+    _langId.close();
     super.dispose();
   }
 }

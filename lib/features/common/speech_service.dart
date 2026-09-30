@@ -107,6 +107,7 @@ class SpeechService {
     required void Function(String text, bool isFinal) onResult,
     required void Function(String message) onError,
     required VoidCallback onDone,
+    void Function(double level)? onSoundLevel,
   }) async {
     await _ensureReady();
     _onError = onError;
@@ -115,6 +116,7 @@ class SpeechService {
     await _speech.listen(
       onResult: (SpeechRecognitionResult r) =>
           onResult(r.recognizedWords, r.finalResult),
+      onSoundLevelChange: onSoundLevel,
       listenOptions: SpeechListenOptions(
         localeId: localeId,
         listenFor: const Duration(seconds: 20),

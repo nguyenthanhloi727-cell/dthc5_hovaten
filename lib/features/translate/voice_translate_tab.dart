@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../common/mic_button.dart';
 import '../common/speech_service.dart';
 import '../common/ui_helpers.dart';
 import 'translate_widgets.dart';
@@ -20,6 +21,7 @@ class _VoiceTranslateTabState extends State<VoiceTranslateTab>
   final _speech = SpeechService.instance;
   final _heard = TextEditingController();
   bool _listening = false;
+  double _level = 0;
 
   @override
   TranslationController get controller => widget.controller;
@@ -43,6 +45,8 @@ class _VoiceTranslateTabState extends State<VoiceTranslateTab>
     setState(() {
       _listening = true;
       error = null;
+      result = null;
+      _heard.clear();
     });
     var gotFinal = false;
     try {
@@ -66,9 +70,15 @@ class _VoiceTranslateTabState extends State<VoiceTranslateTab>
         onError: (msg) {
           if (mounted) showError(context, msg);
         },
+        onSoundLevel: (l) {
+          if (mounted) setState(() => _level = l);
+        },
         onDone: () {
           if (!mounted) return;
-          setState(() => _listening = false);
+          setState(() {
+            _listening = false;
+            _level = 0;
+          });
           if (!gotFinal && _heard.text.trim().isNotEmpty) {
             gotFinal = true;
             runTranslate(_heard.text);
@@ -96,11 +106,10 @@ class _VoiceTranslateTabState extends State<VoiceTranslateTab>
         children: [
           const SizedBox(height: 8),
           Center(
-            child: FloatingActionButton.large(
-              heroTag: 'translate_mic',
+            child: MicButton(
+              listening: _listening,
+              soundLevel: _level,
               onPressed: _toggle,
-              backgroundColor: _listening ? Colors.red : null,
-              child: Icon(_listening ? Icons.stop : Icons.mic),
             ),
           ),
           const SizedBox(height: 8),
@@ -128,6 +137,7 @@ class _VoiceTranslateTabState extends State<VoiceTranslateTab>
             label: const Text('Dịch lại'),
           ),
           const SizedBox(height: 8),
+          buildMismatchHint(),
           TranslationResultCard(
             result: result,
             error: error,

@@ -174,7 +174,12 @@ mixin TranslateRunner<T extends StatefulWidget> on State<T> {
   String? error;
   bool translating = false;
 
-  Future<void> runTranslate(String text) async {
+  /// Ngôn ngữ phát hiện được khi khác với ngôn ngữ nguồn đang chọn.
+  AppLanguage? mismatch;
+  String _lastText = '';
+
+  /// Nếu [autoSwitch] thì tự đổi ngôn ngữ nguồn khi phát hiện sai.
+  Future<void> runTranslate(String text, {bool autoSwitch = false}) async {
     if (text.trim().isEmpty) {
       setState(() {
         result = null;
@@ -182,10 +187,30 @@ mixin TranslateRunner<T extends StatefulWidget> on State<T> {
       });
       return;
     }
+    _lastText = text;
     setState(() {
       translating = true;
       error = null;
+      mismatch = null;
     });
+    final detected = await controller.detectLanguage(text);
+    if (detected != null && detected != controller.source) {
+      if (autoSwitch) {
+        if (detected == controller.target) controller.swap();
+        controller.setSource(detected);
+        if (mounted) {
+          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+            SnackBar(
+              content: Text(
+                'Phát hiện ${detected.name} → đã đổi ngôn ngữ nguồn.',
+              ),
+            ),
+          );
+        }
+      } else if (mounted) {
+        setState(() => mismatch = detected);
+      }
+    }
     try {
       final r = await controller.translate(text);
       if (mounted) setState(() => result = r);
@@ -196,5 +221,30 @@ mixin TranslateRunner<T extends StatefulWidget> on State<T> {
     } finally {
       if (mounted) setState(() => translating = false);
     }
+  }
+
+  /// Gợi ý đổi ngôn ngữ nguồn khi văn bản không khớp (hiện ngay trên kết quả).
+  Widget buildMismatchHint() {
+    final lang = mismatch;
+    if (lang == null) return const SizedBox.shrink();
+    return Card(
+      color: Colors.amber.shade100,
+      child: ListTile(
+        leading: const Icon(Icons.warning_amber, color: Colors.orange),
+        title: Text(
+          'Văn bản có vẻ là ${lang.name}, '
+          'nhưng bạn đang dịch từ ${controller.source.name}.',
+        ),
+        subtitle: const Text('Chọn sai ngôn ngữ nguồn sẽ làm bản dịch sai.'),
+        trailing: TextButton(
+          onPressed: () {
+            if (lang == controller.target) controller.swap();
+            controller.setSource(lang);
+            runTranslate(_lastText);
+          },
+          child: Text('Dịch từ\n${lang.name}', textAlign: TextAlign.center),
+        ),
+      ),
+    );
   }
 }
