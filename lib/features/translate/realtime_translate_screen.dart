@@ -6,7 +6,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:permission_handler/permission_handler.dart';
+
+import '../common/native_bridge.dart';
 
 import 'translate_widgets.dart';
 import 'translation_controller.dart';
@@ -93,15 +94,7 @@ class _RealtimeTranslateScreenState extends State<RealtimeTranslateScreen>
       _error = null;
       _permanentlyDenied = false;
     });
-    final status = await Permission.camera.request();
-    if (!status.isGranted) {
-      if (!mounted) return;
-      setState(() {
-        _permanentlyDenied = status.isPermanentlyDenied || status.isRestricted;
-        _error = 'Cần quyền camera để dịch realtime.';
-      });
-      return;
-    }
+    // CameraController.initialize() tự xin quyền CAMERA.
     try {
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
@@ -129,11 +122,14 @@ class _RealtimeTranslateScreenState extends State<RealtimeTranslateScreen>
       setState(() {});
     } on CameraException catch (e) {
       if (!mounted) return;
-      final denied = e.code.contains('Denied') || e.code.contains('denied');
+      // CameraAccessDenied: vừa bấm từ chối -> cho thử lại.
+      // CameraAccessDeniedWithoutPrompt / Restricted: đã chặn -> mở Cài đặt.
+      final denied = e.code.startsWith('CameraAccess');
       setState(() {
-        _permanentlyDenied = denied;
+        _permanentlyDenied =
+            e.code.contains('WithoutPrompt') || e.code.contains('Restricted');
         _error = denied
-            ? 'Quyền camera bị từ chối.'
+            ? 'Cần quyền camera để dịch realtime.'
             : 'Không mở được camera: ${e.description ?? e.code}';
       });
     }
@@ -290,7 +286,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 12),
             if (openSettings)
               const FilledButton(
-                onPressed: openAppSettings,
+                onPressed: NativeBridge.openAppSettings,
                 child: Text('Mở Cài đặt'),
               )
             else

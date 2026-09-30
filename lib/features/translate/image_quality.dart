@@ -1,5 +1,6 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
-import 'package:image/image.dart' as img;
 
 /// Kết quả kiểm định chất lượng ảnh trước khi nhận dạng chữ.
 class ImageQuality {
@@ -18,27 +19,38 @@ class ImageQuality {
   bool get isOverexposed => brightness > 225;
   bool get isGood => !isBlurry && !isDark && !isOverexposed;
 
-  /// Tính trong isolate riêng để không giật UI.
-  static Future<ImageQuality?> analyze(Uint8List bytes) =>
-      compute(_analyze, bytes);
-}
-
-ImageQuality? _analyze(Uint8List bytes) {
-  final decoded = img.decodeImage(bytes);
-  if (decoded == null) return null;
-  // Thu nhỏ về chiều rộng cố định để ngưỡng độ nét không phụ thuộc độ phân giải.
-  final small = img.grayscale(img.copyResize(decoded, width: 640));
-  final w = small.width, h = small.height;
-  final lum = List<double>.filled(w * h, 0);
-  var sum = 0.0;
-  for (var y = 0; y < h; y++) {
-    for (var x = 0; x < w; x++) {
-      final v = small.getPixel(x, y).r.toDouble();
-      lum[y * w + x] = v;
-      sum += v;
+  /// Giải mã ảnh (thu nhỏ về rộng 640px) bằng dart:ui rồi tính trong isolate
+  /// riêng để không giật UI.
+  static Future<ImageQuality?> analyze(Uint8List bytes) async {
+    try {
+      final codec = await ui.instantiateImageCodec(bytes, targetWidth: 640);
+      final frame = await codec.getNextFrame();
+      final image = frame.image;
+      final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final w = image.width, h = image.height;
+      image.dispose();
+      if (data == null) return null;
+      return await compute(_measure, (data.buffer.asUint8List(), w, h));
+    } catch (_) {
+      return null;
     }
   }
-  // Laplacian 4 lân cận.
+}
+
+ImageQuality _measure((Uint8List, int, int) a) =>
+    measureQuality(a.$1, a.$2, a.$3);
+
+/// Tính độ nét + độ sáng từ ảnh RGBA [w]x[h]. Tách riêng để unit test được.
+ImageQuality measureQuality(Uint8List rgba, int w, int h) {
+  final lum = Float64List(w * h);
+  var sum = 0.0;
+  for (var i = 0; i < w * h; i++) {
+    final p = i * 4;
+    final v = 0.299 * rgba[p] + 0.587 * rgba[p + 1] + 0.114 * rgba[p + 2];
+    lum[i] = v;
+    sum += v;
+  }
+  // Laplacian 4 lân cận, phương sai tính theo Welford.
   var n = 0;
   var mean = 0.0, m2 = 0.0;
   for (var y = 1; y < h - 1; y++) {

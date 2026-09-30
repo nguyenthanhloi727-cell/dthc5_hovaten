@@ -6,8 +6,7 @@ plugins {
 
 android {
     namespace = "com.nguyen_thanh_loi.app"
-    // permission_handler_android 14.x yêu cầu compile với API 37 trở lên.
-    compileSdk = maxOf(flutter.compileSdkVersion, 37)
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

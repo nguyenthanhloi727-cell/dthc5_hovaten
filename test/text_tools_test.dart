@@ -58,6 +58,25 @@ void main() {
     });
   });
 
+  group('detectLanguageCode', () {
+    final cases = {
+      'Xin chào các bạn, hôm nay trời đẹp quá': 'vi',
+      'xin chao cac ban, hom nay troi dep qua nen chung ta di choi nhe': 'vi',
+      'I went to the market and it was very crowded': 'en',
+      'Je ne sais pas ce que vous voulez dans la vie': 'fr',
+      'Ich weiß nicht, was das ist und wer sie sind': 'de',
+      'Yo no sé lo que es, pero es muy bonito para mí': 'es',
+      'こんにちは、元気ですか': 'ja',
+      '안녕하세요 반갑습니다': 'ko',
+      '你好，今天天气很好': 'zh',
+      'ok': null,
+      '12345 67890': null,
+    };
+    cases.forEach((text, lang) {
+      test('"$text" -> $lang', () => expect(detectLanguageCode(text), lang));
+    });
+  });
+
   test('letterRatio', () {
     expect(letterRatio('abc'), 1);
     expect(letterRatio('a1'), 0.5);

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -36,19 +35,8 @@ class SpeechService {
   bool get isListening => _speech.isListening;
 
   Future<void> _ensureReady() async {
-    final status = await Permission.microphone.request();
-    if (status.isPermanentlyDenied || status.isRestricted) {
-      throw const SpeechException(
-        'Quyền micro đã bị chặn. Hãy bật lại trong Cài đặt ứng dụng.',
-        openSettings: true,
-      );
-    }
-    if (!status.isGranted) {
-      throw const SpeechException(
-        'Cần cấp quyền micro để nhận dạng giọng nói.',
-      );
-    }
     if (_ready) return;
+    // speech_to_text tự hiện hộp thoại xin quyền RECORD_AUDIO khi initialize.
     _ready = await _speech.initialize(
       onError: _handleError,
       onStatus: (s) {
@@ -58,6 +46,12 @@ class SpeechService {
         }
       },
     );
+    if (!_ready && !await _speech.hasPermission) {
+      throw const SpeechException(
+        'Chưa có quyền micro. Bấm "Cài đặt" → Quyền → Micro → Cho phép.',
+        openSettings: true,
+      );
+    }
     if (!_ready) {
       throw const SpeechException(
         'Thiết bị không hỗ trợ nhận dạng giọng nói '

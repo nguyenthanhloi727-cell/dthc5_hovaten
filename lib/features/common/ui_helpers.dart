@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+
+import 'native_bridge.dart';
 
 /// Hiện lỗi dạng SnackBar; nếu [openSettings] thì có nút mở Cài đặt ứng dụng.
 void showError(
@@ -20,7 +21,7 @@ void showError(
             ? SnackBarAction(
                 label: 'Cài đặt',
                 textColor: Colors.white,
-                onPressed: openAppSettings,
+                onPressed: NativeBridge.openAppSettings,
               )
             : null,
       ),

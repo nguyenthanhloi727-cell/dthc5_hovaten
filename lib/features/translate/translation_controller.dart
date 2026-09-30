@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
 import 'text_tools.dart';
@@ -36,7 +35,6 @@ enum ModelStatus { unknown, checking, downloading, ready, error }
 /// translator ML Kit.
 class TranslationController extends ChangeNotifier {
   final _models = OnDeviceTranslatorModelManager();
-  final _langId = LanguageIdentifier(confidenceThreshold: 0.5);
 
   AppLanguage source = AppLanguage.all[1]; // Anh
   AppLanguage target = AppLanguage.all[0]; // Việt
@@ -151,20 +149,12 @@ class TranslationController extends ChangeNotifier {
     }
   }
 
-  /// Nhận diện ngôn ngữ của [text] (ML Kit Language ID, offline).
+  /// Đoán ngôn ngữ của [text] (xem [detectLanguageCode] trong text_tools).
   /// Trả null nếu không chắc chắn hoặc không thuộc danh sách hỗ trợ.
   Future<AppLanguage?> detectLanguage(String text) async {
-    final t = text.trim();
-    if (t.length < 8) return null;
-    try {
-      final tag = await _langId.identifyLanguage(t);
-      if (tag == _langId.undeterminedLanguageCode) return null;
-      return AppLanguage.all
-          .where((l) => l.code == tag || tag.startsWith('${l.code}-'))
-          .firstOrNull;
-    } catch (_) {
-      return null;
-    }
+    final code = detectLanguageCode(text);
+    if (code == null) return null;
+    return AppLanguage.all.where((l) => l.code == code).firstOrNull;
   }
 
   void _notify() {
@@ -175,7 +165,6 @@ class TranslationController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _translator?.close();
-    _langId.close();
     super.dispose();
   }
 }
