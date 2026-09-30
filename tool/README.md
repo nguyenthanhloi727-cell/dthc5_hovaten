@@ -3,7 +3,7 @@
 ## Đổi thông tin người nộp bài (dùng cái này)
 
 **Cách 1 – bấm đúp `doi_thong_tin.bat`** ở thư mục gốc (hoặc chạy `dart run tool/doi_thong_tin.dart`).
-Tool hỏi lần lượt: MSSV, họ tên, SĐT, email, lớp, vai trò, file ảnh, tên/email git.
+Tool hỏi lần lượt: MSSV, họ tên, SĐT, email, lớp, file ảnh, tên/email git.
 Enter = giữ giá trị trong `[ ]`. Nhập sai sẽ bị báo lỗi và hỏi lại.
 
 **Cách 2 – điền file rồi chạy** (khi terminal không gõ được tiếng Việt):

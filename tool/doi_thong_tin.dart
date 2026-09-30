@@ -1,6 +1,6 @@
 // TOOL ĐỔI THÔNG TIN NGƯỜI NỘP BÀI
 //
-// Hỏi lần lượt từng trường (họ tên, MSSV, SĐT, email, lớp, vai trò, ảnh,
+// Hỏi lần lượt từng trường (họ tên, MSSV, SĐT, email, lớp, ảnh,
 // tên/email git), kiểm tra hợp lệ, rồi thay toàn bộ danh tính app:
 //   members.json -> lib/config/*.dart, tên app, applicationId, MainActivity...
 // Cuối cùng chạy `flutter analyze` để chắc chắn không lỗi.
@@ -132,7 +132,6 @@ Future<void> main(List<String> args) async {
   _row('SĐT', me['sdt']);
   _row('Email', me['email']);
   _row('Lớp', me['lop']);
-  _row('Vai trò', me['vai_tro']);
   _row(
     'Ảnh',
     photoSrc == null || photoSrc.isEmpty
@@ -161,6 +160,10 @@ Future<void> main(List<String> args) async {
     _installPhoto(photoSrc, me);
   }
   data['current'] = me['mssv'];
+  // Bỏ trường "vai_tro" của members.json bản cũ (đã không dùng nữa).
+  for (final m in members) {
+    m.remove('vai_tro');
+  }
   data['members'] = members;
   _write(_membersFile, '${const JsonEncoder.withIndent('  ').convert(data)}\n');
   stdout.writeln('  ✓ ghi members.json');
@@ -256,11 +259,6 @@ Map<String, dynamic> _askMember(
   out['lop'] = _ask(
     'Lớp',
     current: m['lop'] as String?,
-    check: checkNotEmpty,
-  ).trim();
-  out['vai_tro'] = _ask(
-    'Vai trò',
-    current: (m['vai_tro'] as String?) ?? 'Thành viên',
     check: checkNotEmpty,
   ).trim();
   return out;
@@ -400,7 +398,6 @@ List<String> _validateAll(Map<String, dynamic> n) {
   c('sdt', checkSdt);
   c('email', checkEmail);
   c('lop', checkNotEmpty);
-  c('vai_tro', checkNotEmpty);
   return errors;
 }
 
@@ -412,7 +409,6 @@ Map<String, dynamic> _normalize(Map<String, dynamic> n) {
     'sdt': normalizeSdt(n['sdt'] as String),
     'email': (n['email'] as String).trim(),
     'lop': (n['lop'] as String).trim(),
-    'vai_tro': (n['vai_tro'] as String).trim(),
     'anh': _existingPhoto(mssv) ?? '$_photoDir/$mssv.jpg',
   };
 }
@@ -475,9 +471,7 @@ void _printTeam(List<Map<String, dynamic>> members, String? current) {
   for (var i = 0; i < members.length; i++) {
     final m = members[i];
     final mark = m['mssv'] == current ? '  ← người nộp' : '';
-    stdout.writeln(
-      '  ${i + 1}. ${m['mssv']}  ${m['ho_ten']}  (${m['vai_tro']})$mark',
-    );
+    stdout.writeln('  ${i + 1}. ${m['mssv']}  ${m['ho_ten']}$mark');
   }
 }
 

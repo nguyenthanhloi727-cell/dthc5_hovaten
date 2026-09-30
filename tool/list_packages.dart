@@ -43,7 +43,9 @@ void main() {
     final link = version == 'SDK'
         ? '`$name`'
         : '[`$name`](https://pub.dev/packages/$name)';
-    final usage = _usage[name] ?? '_(chưa ghi — thêm vào `_usage` trong tool/list_packages.dart)_';
+    final usage =
+        _usage[name] ??
+        '_(chưa ghi — thêm vào `_usage` trong tool/list_packages.dart)_';
     rows.writeln('| $link | $version | $usage | $kind |');
   }
 
@@ -54,7 +56,8 @@ void main() {
     add(d, 'dev_dependency');
   }
 
-  final block = '$_start\n'
+  final block =
+      '$_start\n'
       '<!-- Sinh tự động bởi `dart run tool/list_packages.dart`, đừng sửa tay. -->\n'
       '${rows.toString().trimRight()}\n'
       '$_end';
@@ -68,8 +71,10 @@ void main() {
   }
   readme.writeAsStringSync(text);
   stdout.writeln(rows);
-  stdout.writeln('✓ Đã cập nhật bảng package trong README.md '
-      '(${deps.length} dependency, ${devDeps.length} dev_dependency).');
+  stdout.writeln(
+    '✓ Đã cập nhật bảng package trong README.md '
+    '(${deps.length} dependency, ${devDeps.length} dev_dependency).',
+  );
 }
 
 /// Tên các package trực tiếp trong mục [section] của pubspec.yaml.

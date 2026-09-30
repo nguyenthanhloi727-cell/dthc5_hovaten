@@ -48,7 +48,7 @@ Chạy test: `flutter test` · Kiểm tra code: `flutter analyze`
 
 Mỗi người nộp bài riêng nên phải đổi app thành tên mình. **Không sửa tay trong code.**
 
-**a. Chuẩn bị thông tin:** họ tên có dấu, MSSV, SĐT, email, lớp, vai trò, 1 ảnh chân dung (.jpg/.png, dưới 5MB).
+**a. Chuẩn bị thông tin:** họ tên có dấu, MSSV, SĐT, email, lớp, 1 ảnh chân dung (.jpg/.png, dưới 5MB).
 
 **b. Chạy tool** — bấm đúp `doi_thong_tin.bat` ở thư mục gốc, hoặc:
 
@@ -74,7 +74,6 @@ Mẫu 1 entry trong `members.json` (tool tự ghi, không cần sửa tay):
   "sdt": "0900000009",
   "email": "nguyenvana@example.com",
   "lop": "DTHC5",
-  "vai_tro": "Thành viên",
   "anh": "assets/members/2200000009.jpg"
 }
 ```

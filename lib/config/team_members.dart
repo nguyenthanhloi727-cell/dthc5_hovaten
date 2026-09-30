@@ -11,7 +11,6 @@ const teamMembers = <Member>[
     sdt: '0900000001',
     email: 'thanhvien1@example.com',
     lop: 'DTHC5',
-    vaiTro: 'Nhóm trưởng',
     anh: null,
   ),
   Member(
@@ -20,7 +19,6 @@ const teamMembers = <Member>[
     sdt: '0900000002',
     email: 'thanhvien2@example.com',
     lop: 'DTHC5',
-    vaiTro: 'Thành viên',
     anh: null,
   ),
   Member(
@@ -29,7 +27,6 @@ const teamMembers = <Member>[
     sdt: '0900000003',
     email: 'thanhvien3@example.com',
     lop: 'DTHC5',
-    vaiTro: 'Thành viên',
     anh: null,
   ),
 ];

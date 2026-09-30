@@ -37,7 +37,7 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  for (final key in ['ho_ten', 'mssv', 'sdt', 'email', 'lop', 'vai_tro']) {
+  for (final key in ['ho_ten', 'mssv', 'sdt', 'email', 'lop']) {
     if ((target[key] ?? '').toString().trim().isEmpty) {
       stderr.writeln(
         'Thành viên $mssv thiếu trường "$key" trong $_membersFile.',
@@ -230,7 +230,6 @@ $indent  mssv: ${_dartStr(m['mssv'])},
 $indent  sdt: ${_dartStr(m['sdt'])},
 $indent  email: ${_dartStr(m['email'])},
 $indent  lop: ${_dartStr(m['lop'])},
-$indent  vaiTro: ${_dartStr(m['vai_tro'])},
 $indent  anh: ${hasPhoto ? _dartStr(anh) : 'null'},
 $indent)''';
 }

@@ -74,11 +74,6 @@ class ProfileScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            m.vaiTro,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleMedium,
-          ),
           const SizedBox(height: 16),
           Card(
             child: Column(

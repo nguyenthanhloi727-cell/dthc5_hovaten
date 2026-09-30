@@ -7,7 +7,6 @@ class Member {
   final String sdt;
   final String email;
   final String lop;
-  final String vaiTro;
 
   /// Đường dẫn asset ảnh, null nếu file ảnh chưa có trong assets/members/.
   final String? anh;
@@ -18,7 +17,6 @@ class Member {
     required this.sdt,
     required this.email,
     required this.lop,
-    required this.vaiTro,
     this.anh,
   });
 

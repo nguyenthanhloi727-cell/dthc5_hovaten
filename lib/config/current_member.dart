@@ -10,6 +10,5 @@ const currentMember = Member(
   sdt: '0900000001',
   email: 'thanhvien1@example.com',
   lop: 'DTHC5',
-  vaiTro: 'Nhóm trưởng',
   anh: null,
 );

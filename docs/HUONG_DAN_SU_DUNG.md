@@ -18,7 +18,7 @@ Thanh dưới cùng có 6 tab: **Cá nhân · Báo thức · Dịch · Nhóm · 
 
 <img src="images/01_ca_nhan.png" width="260" align="right">
 
-- Hiện họ tên, vai trò, MSSV, lớp, SĐT, email của **người nộp bài**. Dữ liệu lấy từ `members.json` qua file sinh tự động `lib/config/current_member.dart`.
+- Hiện họ tên, MSSV, lớp, SĐT, email của **người nộp bài**. Dữ liệu lấy từ `members.json` qua file sinh tự động `lib/config/current_member.dart`.
 - **Gọi điện 09xx…**: mở màn hình quay số với số đã điền sẵn. Bấm nút gọi xanh của điện thoại để gọi thật.
 - **Mở YouTube**: mở app YouTube. Máy không có app thì mở youtube.com bằng trình duyệt.
 - Bấm vào dòng **Email**: mở app email, gửi tới địa chỉ đó.
@@ -115,7 +115,7 @@ Bấm biểu tượng **camera** ở góc phải trên cùng của tab Dịch. H
 
 <img src="images/09_nhom.png" width="260" align="right">
 
-- **Lướt ngang** để xem từng thành viên: ảnh, họ tên, MSSV, lớp, vai trò.
+- **Lướt ngang** để xem từng thành viên: ảnh, họ tên, MSSV, lớp.
 - Chấm tròn phía dưới cho biết đang ở trang mấy. Bấm vào chấm để nhảy thẳng tới trang đó.
 - Danh sách lấy từ **toàn bộ** `members.json`, không phụ thuộc ai là người nộp.
 
@@ -133,7 +133,7 @@ Mỗi người nộp bài riêng, nên app phải mang **tên, MSSV, SĐT, ảnh
 
 ### Bước 1 — Chuẩn bị
 
-- Họ tên **có dấu**, MSSV, SĐT, email, lớp, vai trò (vd *Thành viên*).
+- Họ tên **có dấu**, MSSV, SĐT, email, lớp.
 - 1 ảnh chân dung `.jpg` hoặc `.png`, dưới 5MB. Nên dùng ảnh vuông.
 - Đã chạy `flutter pub get` ít nhất 1 lần.
 
@@ -156,7 +156,6 @@ Họ và tên (có dấu): Nguyễn Văn A
 Số điện thoại: 0912 345 678
 Email: nguyenvana@gmail.com
 Lớp: DTHC5
-Vai trò [Thành viên]:
 Chưa có ảnh (tab Nhóm sẽ hiện chữ cái đầu).
 Đường dẫn file ảnh .jpg/.png (Enter = bỏ qua): D:\anh\chan_dung.jpg
 Đặt tên/email git cho repo này (commit sẽ mang tên bạn)? [Y/n]: y
@@ -227,7 +226,6 @@ Mở `thong_tin.json` bằng Notepad / VS Code, điền thông tin (lưu dạng 
     "sdt": "0912345678",
     "email": "nguyenvana@gmail.com",
     "lop": "DTHC5",
-    "vai_tro": "Thành viên",
     "anh_file": "D:/anh/chan_dung.jpg"
   },
   "git": { "name": "NguyenVanA", "email": "nguyenvana@gmail.com" },
