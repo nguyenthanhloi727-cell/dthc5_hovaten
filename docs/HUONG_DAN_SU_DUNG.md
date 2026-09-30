@@ -22,7 +22,8 @@ Thanh dưới cùng có 6 tab: **Cá nhân · Báo thức · Dịch · Nhóm · 
 - **Gọi điện 09xx…**: mở màn hình quay số với số đã điền sẵn. Bấm nút gọi xanh của điện thoại để gọi thật.
 - **Mở YouTube**: mở app YouTube. Máy không có app thì mở youtube.com bằng trình duyệt.
 - Bấm vào dòng **Email**: mở app email, gửi tới địa chỉ đó.
-- Chưa có ảnh thì hiện 2 chữ cái đầu của tên.
+- **Đổi ảnh đại diện:** chạm vào ảnh (có biểu tượng 📷), chọn **Chụp ảnh** hoặc **Chọn từ thư viện**. Ảnh được lưu trong máy, mở lại app vẫn còn. Chọn **Xoá ảnh** để quay về ảnh mặc định. Việc này chỉ đổi ảnh ở tab Cá nhân; tab Nhóm vẫn dùng ảnh trong `assets/members/`.
+- Chưa chọn ảnh thì dùng ảnh trong `assets/members/<mssv>.jpg`; không có luôn thì hiện 2 chữ cái đầu của tên.
 
 <br clear="right">
 

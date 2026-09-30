@@ -19,6 +19,16 @@ class NativeBridge {
     'message': message,
   });
 
+  /// Thư mục lưu trữ riêng của app (Context.getFilesDir), null nếu không
+  /// chạy trên Android.
+  static Future<String?> filesDir() async {
+    try {
+      return await _channel.invokeMethod<String>('filesDir');
+    } on MissingPluginException {
+      return null;
+    }
+  }
+
   /// Mở trang Cài đặt của app (để bật lại quyền micro/camera).
   static Future<void> openAppSettings() async {
     try {

@@ -52,6 +52,10 @@ public class MainActivity extends FlutterActivity {
                             result.success(true);
                             break;
                         }
+                        case "filesDir":
+                            // Thư mục riêng của app (lưu ảnh đại diện tự chọn).
+                            result.success(getFilesDir().getAbsolutePath());
+                            break;
                         default:
                             result.notImplemented();
                     }
