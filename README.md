@@ -34,8 +34,8 @@ Cần máy Android thật (khuyên dùng) hoặc emulator có Google Play. Lần
 ## Cài đặt & chạy
 
 ```bash
-git clone <link-repo>
-cd <thu-muc-repo>
+git clone https://github.com/nguyenthanhloi727-cell/dthc5_hovaten.git
+cd dthc5_hovaten
 flutter pub get
 flutter run
 ```
