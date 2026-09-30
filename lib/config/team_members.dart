@@ -19,7 +19,7 @@ const teamMembers = <Member>[
     sdt: '0900000002',
     email: 'thanhvien2@example.com',
     lop: '23DTHC5',
-    anh: null,
+    anh: 'assets/members/2380601699.jpg',
   ),
   Member(
     hoTen: 'Phạm Đinh Gia Bảo',
@@ -35,6 +35,6 @@ const teamMembers = <Member>[
     sdt: '0900000004',
     email: 'thanhvien4@example.com',
     lop: '23DTHC5',
-    anh: null,
+    anh: 'assets/members/2380601104.jpg',
   ),
 ];

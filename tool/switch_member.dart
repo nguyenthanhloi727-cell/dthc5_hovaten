@@ -308,7 +308,10 @@ Future<List<String>> _scanLeaks(
       String found(String s) =>
           terms.where(s.toLowerCase().contains).map((t) => '"$t"').join(', ');
       final inName = found(rel);
-      if (inName.isNotEmpty) hits.add('  $rel (tên file chứa $inName)$tag');
+      // Ảnh thành viên trong assets/members/ là dữ liệu của tab Nhóm, không phải sót.
+      if (inName.isNotEmpty && !rel.startsWith('assets/members/')) {
+        hits.add('  $rel (tên file chứa $inName)$tag');
+      }
       String text;
       try {
         text = e.readAsStringSync();
