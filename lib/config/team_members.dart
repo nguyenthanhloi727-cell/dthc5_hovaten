@@ -29,4 +29,12 @@ const teamMembers = <Member>[
     lop: '23DTHC5',
     anh: null,
   ),
+  Member(
+    hoTen: 'Phạm Văn Mẫu Bốn',
+    mssv: '2200000004',
+    sdt: '0900000004',
+    email: 'thanhvien4@example.com',
+    lop: '23DTHC5',
+    anh: null,
+  ),
 ];

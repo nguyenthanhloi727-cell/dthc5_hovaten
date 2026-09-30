@@ -24,6 +24,14 @@
       "email": "thanhvien3@example.com",
       "lop": "23DTHC5",
       "anh": "assets/members/2200000003.jpg"
+    },
+    {
+      "ho_ten": "Phạm Văn Mẫu Bốn",
+      "mssv": "2200000004",
+      "sdt": "0900000004",
+      "email": "thanhvien4@example.com",
+      "lop": "23DTHC5",
+      "anh": "assets/members/2200000004.jpg"
     }
   ]
 }
